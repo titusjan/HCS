@@ -380,9 +380,6 @@ private:
             const char         *path;
             struct udev_device *dev;
             
-            printf("  path: %s\n", path);
-            //std::cout << path << std::endl;
-            
             // Have to grab the actual udev device here...
             path = udev_list_entry_get_name ( entry );
             dev  = udev_device_new_from_syspath ( ud, path );
@@ -390,7 +387,8 @@ private:
             const char *product_id = udev_device_get_property_value ( dev, "ID_MODEL_ID" );
             const char *dev_name   = udev_device_get_property_value ( dev, "DEVNAME" );
 
-            printf("      vendor: %s, product: %s, name: %s\n", vendor_id, product_id, dev_name);
+            //printf("  path: %s\n", path);
+            //printf("      vendor: %s, product: %s, name: %s\n", vendor_id, product_id, dev_name);
 
             if ( vendor_id == nullptr || product_id == nullptr || dev_name == nullptr ) {
                 udev_device_unref ( dev );

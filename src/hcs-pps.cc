@@ -29,8 +29,8 @@
 
 bool PPS11360::check_supported_type ( const char *vendor_id, const char *product_id )
 {
-    if ( strcmp ( vendor_id, "0x10c4" ) == 0 ) {
-        if ( strcmp ( product_id, "0xea60" ) == 0 ) {
+    if ( strcmp ( vendor_id, "10c4" ) == 0 ) {
+        if ( strcmp ( product_id, "ea60" ) == 0 ) {
             return true;
         }
     }
