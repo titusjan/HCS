@@ -367,6 +367,7 @@ private:
     {
         psu_list.clear ();
 #ifdef HAVE_LIBUDEV_H
+        std::cout << "We have libudev." << std::endl;
         struct udev           *ud = udev_new ();
 
         struct udev_enumerate *enumerate = udev_enumerate_new ( ud );
@@ -378,28 +379,38 @@ private:
         {
             const char         *path;
             struct udev_device *dev;
-
-
+            
+            printf("  path: %s\n", path);
+            //std::cout << path << std::endl;
+            
             // Have to grab the actual udev device here...
             path = udev_list_entry_get_name ( entry );
             dev  = udev_device_new_from_syspath ( ud, path );
             const char *vendor_id  = udev_device_get_property_value ( dev, "ID_VENDOR_ID" );
             const char *product_id = udev_device_get_property_value ( dev, "ID_MODEL_ID" );
             const char *dev_name   = udev_device_get_property_value ( dev, "DEVNAME" );
+
+            printf("      vendor: %s, product: %s, name: %s\n", vendor_id, product_id, dev_name);
+
             if ( vendor_id == nullptr || product_id == nullptr || dev_name == nullptr ) {
                 udev_device_unref ( dev );
                 continue;
             }
+            
             // Types
             if ( EAPS2K::check_supported_type ( vendor_id, product_id ) ) {
                 psu_list.push_back ( PSU_dev ( PSU::PSUTypes::EAPS2K, dev_name ) );
+                printf("**** EAPS2K ****\n");
             }
             else if ( PPS11360::check_supported_type ( vendor_id, product_id ) ) {
                 psu_list.push_back ( PSU_dev ( PSU::PSUTypes::PPS11360, dev_name ) );
+                printf("**** PPS11360 ****\n");
             }
             // Done with this device
             udev_device_unref ( dev );
         }
+        std::cout << "Done with the list and this udev" << std::endl;
+
         // Done with the list and this udev
         udev_enumerate_unref ( enumerate );
         udev_unref ( ud );
